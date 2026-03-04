@@ -1,9 +1,9 @@
+import { useEffect, useRef, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import { useGameStore } from "../../store/useGameStore";
 import { JournalPage } from "./Journal/JournalPage";
 import "./Journal/Journal.css";
 
-// Update mock data to include image paths if you want
 const CHAR_DATA: Record<string, { name: string; bio: string; img: string }> = {
   willow: { name: "Willow", bio: "Childhood Friend", img: "willow-happy.png" },
   ash: { name: "Ash", bio: "The Prince", img: "ash-tired.png" },
@@ -19,20 +19,64 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
     toggleFact,
   } = useGameStore();
 
+  // 1. Ref to control the book API
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const bookRef = useRef<any>(null);
+
+  // 2. State for the entrance animation
+  const [isEntering, setIsEntering] = useState(true);
+
+  // 3. The Cinematic Sequence
+  useEffect(() => {
+    // Step A: Wait 100ms, then float the book up (remove 'entering' class)
+    const floatTimer = setTimeout(() => {
+      setIsEntering(false);
+    }, 100);
+
+    // Step B: Wait for the float to finish (1.2s), then flip the cover open automatically
+    const flipTimer = setTimeout(() => {
+      if (bookRef.current) {
+        // The library exposes a .pageFlip() object with methods
+        bookRef.current.pageFlip().flipNext();
+      }
+    }, 1200);
+
+    return () => {
+      clearTimeout(floatTimer);
+      clearTimeout(flipTimer);
+    };
+  }, []);
+
   return (
     <div className="journal-overlay-container">
-      {/* 1. BACKDROP */}
       <div className="backdrop" onClick={onClose} />
 
-      {/* 2. BOOK WRAPPER */}
-      <div className="book-wrapper" onClick={(e) => e.stopPropagation()}>
+      <div
+        // Apply the 'entering' class if the animation state is true
+        className={`book-wrapper ${isEntering ? "entering" : ""}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.nativeEvent.stopImmediatePropagation();
+        }}
+      >
         {/* @ts-expect-error - Library types */}
-        <HTMLFlipBook width={500} height={700} showCover={true}>
+        <HTMLFlipBook
+          width={500}
+          height={700}
+          size="fixed"
+          minWidth={500}
+          minHeight={700}
+          showCover={true}
+          useMouseEvents={true}
+          ref={bookRef} // Attach the ref here
+          flippingTime={1000} // Slower flip looks more "cinematic"
+        >
           {/* Cover */}
           <JournalPage className="cover-hard">
             <h1>CONFIDENTIAL</h1>
             <p>Subject: Clover</p>
           </JournalPage>
+
           <JournalPage>
             <div
               style={{
@@ -64,14 +108,13 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
             </ul>
           </JournalPage>
 
-          {/* DYNAMIC SPREADS (FIXED: Using flatMap) */}
+          {/* DYNAMIC SPREADS */}
           {Object.entries(CHAR_DATA).flatMap(([id, data]) => {
             const isUnlocked = unlockedCharacters.includes(id);
             const notes = journalNotes[id] || "";
             const facts = journalFacts[id] || [];
 
             return [
-              // PAGE LEFT: The Dossier
               <JournalPage key={`${id}-left`}>
                 {isUnlocked ? (
                   <div className="dossier-layout">
@@ -112,7 +155,6 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
                 )}
               </JournalPage>,
 
-              // PAGE RIGHT: Player Notes
               <JournalPage key={`${id}-right`}>
                 {isUnlocked ? (
                   <div className="notes-layout">

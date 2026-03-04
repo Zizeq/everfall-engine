@@ -8,6 +8,8 @@
   justify-content: center;
   align-items: center;
   z-index: 100;
+  /* FIXED: Changed from 'auto' to 'hidden' to prevent scrollbars during page flip animations */
+  overflow: hidden;
 }
 
 .backdrop {
@@ -20,6 +22,13 @@
   z-index: 101;
   /* Shadow for the whole book */
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+
+  /* Keeps the book centered and sized correctly */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 1000px; /* 500px * 2 pages */
+  height: 700px;
 }
 
 /* The Page Itself */
@@ -30,7 +39,6 @@
   box-sizing: border-box;
   font-family: "Courier New", Courier, monospace;
 
-  /* CRITICAL FIXES FOR FLIPBOOK VISIBILITY */
   overflow: hidden;
   display: block;
 }
@@ -120,4 +128,20 @@
 .toc-list .locked {
   color: #999;
   font-style: italic;
+}
+.book-wrapper.entering {
+  transform: perspective(1500px) rotateX(60deg) rotateZ(-10deg) scale(0.8);
+  opacity: 0;
+  transition:
+    transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 1s ease-in;
+  pointer-events: none; /* User can't click while it's flying in */
+}
+
+/* State 2: The Book is upright (default state) */
+.book-wrapper {
+  /* Existing styles... */
+  transform: perspective(1500px) rotateX(0deg) rotateZ(0deg) scale(1);
+  opacity: 1;
+  transition: transform 1s ease-out;
 }

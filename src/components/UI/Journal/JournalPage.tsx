@@ -2,14 +2,18 @@ import { forwardRef, type ReactNode } from "react";
 
 interface PageProps {
   children: ReactNode;
-  number?: number; // Page number
-  className?: string; // For "hard" covers vs paper
+  number?: number;
+  className?: string;
 }
 
+// CRITICAL: wrapping the component in forwardRef
 export const JournalPage = forwardRef<HTMLDivElement, PageProps>(
   (props, ref) => {
     return (
-      <div className={`journal-page ${props.className || ""}`} ref={ref}>
+      <div
+        className={`journal-page ${props.className || ""}`}
+        ref={ref} // <--- THIS IS THE MAGIC KEY. WITHOUT THIS, THE LEFT PAGE VANISHES.
+      >
         <div className="page-content">
           {props.children}
           {props.number && <span className="page-number">{props.number}</span>}
@@ -19,5 +23,5 @@ export const JournalPage = forwardRef<HTMLDivElement, PageProps>(
   },
 );
 
-// We need a CSS file for the visuals, creating a simple style block below
+// Required for debugging/React DevTools
 JournalPage.displayName = "JournalPage";
