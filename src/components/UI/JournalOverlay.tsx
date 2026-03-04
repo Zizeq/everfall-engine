@@ -1,7 +1,7 @@
 import HTMLFlipBook from "react-pageflip";
 import { useGameStore } from "../../store/useGameStore";
 import { JournalPage } from "./Journal/JournalPage";
-import "./Journal/Journal.css"; // We will create this file next!
+import "./Journal/Journal.css";
 
 // Update mock data to include image paths if you want
 const CHAR_DATA: Record<string, { name: string; bio: string; img: string }> = {
@@ -32,6 +32,19 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
           <JournalPage className="cover-hard">
             <h1>CONFIDENTIAL</h1>
             <p>Subject: Clover</p>
+          </JournalPage>
+          <JournalPage>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+                color: "#888",
+              }}
+            >
+              <p>Property of Everfall Academy</p>
+            </div>
           </JournalPage>
 
           {/* Table of Contents */}
