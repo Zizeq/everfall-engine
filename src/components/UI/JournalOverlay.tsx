@@ -23,27 +23,30 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const bookRef = useRef<any>(null);
 
-  // 2. State for the entrance animation
-  const [isEntering, setIsEntering] = useState(true);
+  // 2. Animation States
+  const [isEntering, setIsEntering] = useState(true); // Controls the "Fly In"
+  const [isBookOpen, setIsBookOpen] = useState(false); // Controls the "Shadow Expansion"
 
   // 3. The Cinematic Sequence
   useEffect(() => {
-    // Step A: Wait 100ms, then float the book up (remove 'entering' class)
-    const floatTimer = setTimeout(() => {
+    // Phase 1: Land the book (0ms -> 1000ms)
+    const landTimer = setTimeout(() => {
       setIsEntering(false);
     }, 100);
 
-    // Step B: Wait for the float to finish (1.2s), then flip the cover open automatically
-    const flipTimer = setTimeout(() => {
+    // Phase 2: Open the book (1200ms)
+    const openTimer = setTimeout(() => {
+      // Expand the shadow/body width
+      setIsBookOpen(true);
+      // Flip the page
       if (bookRef.current) {
-        // The library exposes a .pageFlip() object with methods
         bookRef.current.pageFlip().flipNext();
       }
     }, 1200);
 
     return () => {
-      clearTimeout(floatTimer);
-      clearTimeout(flipTimer);
+      clearTimeout(landTimer);
+      clearTimeout(openTimer);
     };
   }, []);
 
@@ -52,13 +55,17 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
       <div className="backdrop" onClick={onClose} />
 
       <div
-        // Apply the 'entering' class if the animation state is true
         className={`book-wrapper ${isEntering ? "entering" : ""}`}
         onClick={(e) => {
           e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation();
         }}
       >
+        {/* --- DYNAMIC SHADOW & BODY --- */}
+        {/* This element sits behind the pages and handles the thickness/shadow logic */}
+        <div className={`book-body-shadow ${isBookOpen ? "open" : "closed"}`} />
+
+        {/* --- THE PAGES --- */}
         {/* @ts-expect-error - Library types */}
         <HTMLFlipBook
           width={500}
@@ -68,8 +75,9 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
           minHeight={700}
           showCover={true}
           useMouseEvents={true}
-          ref={bookRef} // Attach the ref here
-          flippingTime={1000} // Slower flip looks more "cinematic"
+          ref={bookRef}
+          flippingTime={1500} // Slower flip for more weight
+          className="flipbook-layer"
         >
           {/* Cover */}
           <JournalPage className="cover-hard">
@@ -78,15 +86,7 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
           </JournalPage>
 
           <JournalPage>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-                color: "#888",
-              }}
-            >
+            <div className="inner-cover-text">
               <p>Property of Everfall Academy</p>
             </div>
           </JournalPage>
@@ -115,6 +115,7 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
             const facts = journalFacts[id] || [];
 
             return [
+              // PAGE LEFT
               <JournalPage key={`${id}-left`}>
                 {isUnlocked ? (
                   <div className="dossier-layout">
@@ -126,7 +127,6 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
                     </div>
                     <h2>{data.name}</h2>
                     <p className="bio-sub">{data.bio}</p>
-
                     <div className="facts-section">
                       <h4>OBSERVATIONS:</h4>
                       <ul>
@@ -155,6 +155,7 @@ export const JournalOverlay = ({ onClose }: { onClose: () => void }) => {
                 )}
               </JournalPage>,
 
+              // PAGE RIGHT
               <JournalPage key={`${id}-right`}>
                 {isUnlocked ? (
                   <div className="notes-layout">

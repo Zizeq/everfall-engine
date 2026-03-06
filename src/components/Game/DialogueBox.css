@@ -1,0 +1,77 @@
+/* src/components/Game/DialogueBox.css */
+
+.dialogue-box {
+  /* Positioning */
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%); /* Centers the box perfectly */
+  width: 90%;
+  max-width: 1200px; /* Don't get too wide on huge screens */
+  min-height: 180px;
+  box-sizing: border-box;
+  padding: 30px 40px;
+  z-index: 20;
+
+  /* THEME: The Shattered Archive */
+  /* A deep, semi-transparent gradient representing the Void */
+  background: linear-gradient(
+    to bottom,
+    rgba(22, 24, 29, 0.95),
+    rgba(11, 13, 18, 1)
+  );
+
+  /* THEME: Kintsugi - Gold repair line at the top */
+  border-top: 2px solid var(--accent-gold);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+
+  /* Glass/Blur effect for modern feel */
+  backdrop-filter: blur(5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+
+  /* Animation */
+  animation: fadeSlideUp 0.4s ease-out;
+}
+
+/* Character Name Tag */
+.char-name {
+  margin: 0 0 15px 0;
+  font-family: var(--font-header, "Cinzel", serif);
+  color: var(--accent-gold);
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+
+  /* Text Shadow to make it glow slightly */
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+
+  /* Underline element */
+  display: inline-block;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  padding-bottom: 5px;
+}
+
+/* The Dialogue Text */
+.dialogue-text {
+  margin: 0;
+  font-family: var(--font-body, "Lato", sans-serif);
+  color: var(--text-main);
+  font-size: 1.25rem; /* Large enough to read easily */
+  line-height: 1.6;
+  font-weight: 300;
+
+  /* Slight drop shadow for contrast against background */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Entrance Animation */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}

@@ -1,40 +1,34 @@
-// Define what a parsed line looks like
+// src/types/index.ts
+
 export interface ScriptLine {
-  id: string; // Unique ID for React keys
-  type: "dialogue" | "command" | "choice";
-  characterId?: string; // 'a', 'c', 'n'
-  emotion?: string; // 'happy', 'sad'
-  text?: string; // "Hello Clover."
-  command?: string; // "scene kitchen" or "stat energy -10"
-  args?: string[]; // Arguments for commands
+  type: "dialogue" | "command";
+  characterId?: string;
+  emotion?: string;
+  text?: string;
+  command?: string;
+  args?: string[];
 }
 
-export interface JournalFact {
-  text: string;
-  crossed: boolean;
-}
-// Define the Global Game State
 export interface GameState {
   currentChapter: number;
   currentLineIndex: number;
-  scriptLines: ScriptLine[]; // The loaded chapter
-
-  // Player Stats
-  energy: number; // 0-100
+  scriptLines: ScriptLine[];
+  energy: number;
   inventory: string[];
-
-  // Relationship Vitals
-  relationships: {
-    ash: { comfort: number; bond: number };
-    nova: { comfort: number; bond: number };
-    // ... others
-  };
-
-  // Visual State
+  relationships: Record<string, { comfort: number; bond: number }>;
   currentBg: string;
-  activeSprites: Record<string, string>; // { "ash": "tired", "nova": "happy" }
+  activeSprites: Record<string, string>;
 
+  // Journal
   journalNotes: Record<string, string>;
-  journalFacts: Record<string, JournalFact[]>;
+  journalFacts: Record<string, { text: string; crossed: boolean }[]>;
   unlockedCharacters: string[];
+}
+
+// FIXED: Replaced 'any' with 'GameState'
+export interface SaveFile {
+  id: string;
+  date: string;
+  previewText: string;
+  gameState: GameState;
 }

@@ -1,0 +1,317 @@
+/* Main Menu Background */
+.main-menu-container {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("/assets/images/backgrounds/graduation.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: "Courier New", monospace;
+}
+
+.game-title {
+  /* 1. TYPOGRAPHY */
+  font-family: var(--font-header, "Cinzel", serif);
+  font-weight: 900; /* Maximum thickness */
+  font-size: 6rem; /* Massive */
+  letter-spacing: 0.5em; /* W i d e   S t a n c e */
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1;
+
+  /* Positioning */
+  margin-bottom: 4rem;
+  position: relative;
+
+  /* 2. THE TEXTURE (Kintsugi Gold + Starlight) */
+  background-image: linear-gradient(
+    to bottom,
+    #fff 0%,
+    /* Star white top */ #ffd700 20%,
+    /* Gold highlight */ #b8860b 50%,
+    /* Dark gold mid */ #5d4037 100% /* Earth/Leather bottom */
+  );
+
+  /* Clip background to text to create "Metallic" look */
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent; /* Hide actual text color */
+
+  /* 3. THE SHADOW (Depth) */
+  /* Since text is transparent, we use filter: drop-shadow instead of text-shadow */
+  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.5)) /* Sharp rim */
+    drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8)); /* Deep distance shadow */
+
+  /* Animation: Subtle breathing */
+  animation: titlePulse 8s ease-in-out infinite;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 300px;
+}
+
+.menu-buttons button {
+  padding: 15px;
+  font-size: 1.2rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.menu-buttons button:hover:not(.disabled) {
+  background: #ffd700;
+  color: #000;
+  transform: scale(1.05);
+}
+
+.menu-buttons button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #555;
+  color: #555;
+}
+
+.version-tag {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  opacity: 0.5;
+}
+
+/* Options Menu */
+.options-container {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-family: "Courier New", monospace;
+}
+
+.options-panel {
+  background: #2e1c15;
+  padding: 40px;
+  border: 2px solid #5d4037;
+  width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.setting-row input {
+  flex-grow: 1;
+  margin: 0 20px;
+}
+
+.options-actions {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.options-actions button {
+  padding: 10px 30px;
+  background: transparent;
+  border: 1px solid #c2b5a3;
+  color: #c2b5a3;
+  cursor: pointer;
+}
+
+.options-actions button:hover {
+  background: #c2b5a3;
+  color: #2e1c15;
+}
+
+/* HUD Buttons (In-Game) */
+.hud-buttons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 50;
+}
+
+.hud-btn {
+  background: #5d4037;
+  color: #ffd700;
+  border: 2px solid #3e2723;
+  padding: 10px 20px;
+  font-family: "Courier New", monospace;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.hud-btn:hover {
+  background: #6d4c41;
+  transform: translateY(-2px);
+}
+
+.quit-btn {
+  background: #3e2723; /* Darker for quit */
+  border-color: #2e1c15;
+  font-size: 0.8rem;
+}
+/* Save/Load Overlay */
+.save-load-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200; /* Higher than everything else */
+}
+
+.save-load-panel {
+  background: #2e1c15;
+  padding: 40px;
+  border: 2px solid #5d4037;
+  width: 800px; /* Wide for slots */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: #c2b5a3;
+  text-align: center;
+}
+
+.slots-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.save-slot {
+  flex: 1;
+  background: #1a0f0b;
+  border: 1px solid #5d4037;
+  height: 200px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.save-slot:hover {
+  border-color: #ffd700;
+  transform: translateY(-5px);
+}
+
+.save-slot.empty {
+  opacity: 0.5;
+  border-style: dashed;
+}
+/* Disable clicking empty slots in LOAD mode */
+.save-slot.empty:hover {
+  cursor: default;
+  border-color: #5d4037;
+  transform: none;
+}
+
+.slot-header {
+  background: #3e2723;
+  color: #ffd700;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.slot-content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slot-date {
+  color: #888;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+}
+
+.slot-preview {
+  color: #fff;
+  font-style: italic;
+}
+
+.back-btn {
+  padding: 10px 30px;
+  background: transparent;
+  border: 1px solid #c2b5a3;
+  color: #c2b5a3;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.2rem;
+}
+.back-btn:hover {
+  background: #c2b5a3;
+  color: #2e1c15;
+}
+.game-subtitle {
+  font-family: var(--font-body);
+  color: #8b9bb4;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-top: -3rem; /* Tuck it under the title */
+  margin-bottom: 4rem;
+}
+
+@keyframes titlePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.5))
+      drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+  }
+  50% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8))
+      drop-shadow(0 15px 25px rgba(0, 0, 0, 0.9));
+  }
+}
+.game-title::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%; /* Wider than text */
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-gold) 20%,
+    #fff 50%,
+    var(--accent-gold) 80%,
+    transparent 100%
+  );
+
+  /* Rotate to slash through */
+  transform: translate(-50%, -50%) rotate(-2deg);
+
+  /* Glow */
+  box-shadow: 0 0 10px var(--accent-gold);
+  opacity: 0.8;
+  pointer-events: none;
+}

@@ -1,0 +1,98 @@
+/* src/components/UI/RuneButton.css */
+
+.rune-btn-root {
+  /* ... vars ... */
+  --arcane-cyan: #00f0ff;
+  --arcane-cyan-dim: #00f0ff40;
+  --void-stone: #151720;
+  --void-stone-light: #252a3a;
+
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 18px 45px;
+  cursor: pointer;
+  isolation: isolate;
+  min-width: 220px;
+  min-height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: runeFloat 4s ease-in-out infinite;
+}
+
+/* ... hover states ... */
+
+/* --- LAYER 1: THE ARCANE STONE --- */
+.rune-layer-rock {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: var(--void-stone);
+
+  /* Texture remains the same */
+  background-image:
+    repeating-radial-gradient(
+      circle at 50% 0%,
+      transparent 0,
+      rgba(0, 240, 255, 0.05) 1px,
+      transparent 20px
+    ),
+    linear-gradient(160deg, var(--void-stone-light), var(--void-stone));
+
+  /* THE FIX: Softer Shadows */
+  filter: url(#rock-filter) /* 1. The Glow: Kept tight to the rock */
+    drop-shadow(0 0 5px var(--arcane-cyan-dim))
+    /* 2. The Depth Shadow: Increased Blur (20px), Lower Opacity (0.6) */
+    /* This makes it look like a diffuse shadow of a floating object, not a cardboard cutout */
+    drop-shadow(0 15px 20px rgba(0, 0, 0, 0.6));
+
+  transition: all 0.4s ease;
+}
+
+/* Hover: Energy Surge */
+.rune-btn-root:hover .rune-layer-rock {
+  background-image: linear-gradient(160deg, #1a2639, #0d1117);
+
+  /* On hover, the glow intensifies but stays soft */
+  filter: url(#rock-filter) drop-shadow(0 0 5px var(--arcane-cyan))
+    drop-shadow(0 0 25px var(--arcane-cyan-dim));
+}
+
+/* ... The rest (text layer) remains the same ... */
+.rune-layer-text {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-header, "Cinzel", serif);
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #e0ffff;
+  text-shadow:
+    0 0 10px var(--arcane-cyan),
+    0 0 20px var(--arcane-cyan),
+    -1px -1px 0 #000,
+    1px 1px 0 #000;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.rune-btn-root:hover .rune-layer-text {
+  color: #ffffff;
+  text-shadow:
+    0 0 15px var(--arcane-cyan),
+    0 0 30px var(--arcane-cyan),
+    -1px -1px 0 #000;
+  letter-spacing: 6px;
+}
+
+@keyframes runeFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}

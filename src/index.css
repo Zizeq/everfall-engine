@@ -1,31 +1,113 @@
-/* src/index.css */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* --- COLOR PALETTE --- */
 
-  /* Prevent selecting text like a website */
-  user-select: none;
-  -webkit-user-select: none;
+  /* Backgrounds */
+  --bg-deep: #0b0d12;
+  --bg-panel: #16181d;
+  --bg-paper: #f4e4bc;
+  --bg-overlay: rgba(11, 13, 18, 0.85);
+
+  /* Text */
+  --text-main: #e6e6e6;
+  --text-muted: #8b9bb4;
+  --text-paper: #2e1c15;
+  --text-highlight: #fff;
+
+  /* Accents */
+  --accent-gold: #ffd700;
+  --accent-gold-dim: #c5a000;
+  --accent-magic: #64d2ff;
+  --accent-danger: #ff4d4d;
+
+  /* Typography */
+  --font-header: "Cinzel", serif;
+  --font-body: "Lato", sans-serif;
+  --font-journal: "Special Elite", monospace;
 }
 
 body {
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: var(--font-body);
   margin: 0;
-  padding: 0;
-  display: flex;
-  place-items: center;
-  justify-content: center;
-  min-width: 320px;
-  min-height: 100vh;
-  background-color: #000; /* Black borders for the game */
-  overflow: hidden; /* No scrollbars allowed */
+  overflow: hidden;
+  /* Subtle Vignette */
+  background-image: radial-gradient(
+    circle at center,
+    transparent 0%,
+    #000 100%
+  );
 }
 
-/* Ensure the game container acts like a fixed window */
-#root {
-  width: 100%;
-  height: 100vh;
+/* --- GLOBAL BUTTONS (Borderless / Shadowless) --- */
+button {
+  /* Pure Glass: No border, no shadow, just faint background */
+  background: rgba(22, 24, 29, 0.4);
+  border: none;
+  box-shadow: none;
+
+  color: var(--text-muted);
+  font-family: var(--font-header);
+  font-size: 1rem;
+  letter-spacing: 1px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(2px); /* Very subtle blur */
+  border-radius: 4px; /* Soft corners */
+  text-transform: uppercase;
+}
+
+button:hover:not(:disabled) {
+  /* On hover, just become slightly brighter/more opaque */
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-highlight);
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: transparent;
+}
+
+/* --- HUD BUTTONS (Top Right) --- */
+.hud-buttons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: 15px;
+  z-index: 50;
+}
+
+.hud-btn {
+  font-size: 0.9rem;
+  font-weight: 700;
+  /* Default: Blue-ish text, barely visible background */
+  color: rgba(100, 210, 255, 0.7);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.hud-btn:hover {
+  /* Hover: Text goes bright cyan, background lightens slightly */
+  color: var(--accent-magic);
+  background: rgba(100, 210, 255, 0.1);
+}
+
+/* The "Exit" button - Red tint */
+.hud-btn.quit-btn {
+  color: rgba(255, 77, 77, 0.7);
+}
+
+.hud-btn.quit-btn:hover {
+  color: var(--accent-danger);
+  background: rgba(255, 77, 77, 0.1);
+}
+
+/* --- UTILITIES --- */
+.kintsugi-text {
+  position: relative;
+  display: inline-block;
+  color: var(--text-main);
 }

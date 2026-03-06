@@ -3,11 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=Special+Elite&display=swap"
+      rel="stylesheet"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>everfall-engine</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <body>
+      <div id="root"></div>
+
+      <svg
+        style="position: absolute; width: 0; height: 0; pointer-events: none"
+      >
+        <defs>
+          <filter id="rock-filter">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.03"
+              numOctaves="3"
+              result="noise"
+            />
+
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="15"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      <script type="module" src="/src/main.tsx"></script>
+    </body>
   </body>
 </html>
