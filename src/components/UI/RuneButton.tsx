@@ -1,41 +1,36 @@
+/* src/components/UI/RuneButton.tsx */
 import React from "react";
 import "./RuneButton.css";
 
 interface RuneButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "shard" | "tablet" | "jagged";
-  isPrimary?: boolean;
 }
 
 export const RuneButton = ({
   children,
   variant = "shard",
-  isPrimary = false,
   className,
-  style,
   ...props
 }: RuneButtonProps) => {
-  // NEW SHAPES: Deliberately asymmetric to look organic
-  const shapes = {
-    // A lopsided shard
-    shard: "polygon(15% 5%, 95% 0%, 100% 60%, 85% 100%, 5% 95%, 0% 30%)",
-    // A chipped ancient tablet
+  // Sharp, faceted crystal shapes
+  const crystalShapes = {
+    shard: "polygon(5% 20%, 90% 10%, 100% 50%, 90% 90%, 10% 95%, 0% 50%)",
     tablet:
-      "polygon(2% 15%, 8% 2%, 95% 0%, 100% 85%, 92% 100%, 10% 95%, 0% 80%)",
-    // A jagged raw crystal
-    jagged: "polygon(5% 0%, 100% 10%, 90% 100%, 20% 90%, 0% 20%)",
+      "polygon(0% 15%, 15% 0%, 85% 5%, 100% 20%, 95% 85%, 80% 100%, 15% 95%)",
+    jagged: "polygon(10% 25%, 90% 0%, 100% 40%, 85% 90%, 10% 100%, 0% 60%)",
   };
 
   return (
     <button
-      className={`rune-btn-root ${className || ""}`}
-      style={style}
+      className={`crystal-btn-root ${className || ""}`}
+      style={{ clipPath: crystalShapes[variant] }}
       {...props}
     >
-      <div
-        className={`rune-layer-rock ${isPrimary ? "primary" : ""}`}
-        style={{ clipPath: shapes[variant] }}
-      />
-      <span className="rune-layer-text">{children}</span>
+      {/* Internal layers for depth */}
+      <div className="crystal-layer-bg" />
+      <div className="crystal-layer-facets" />
+      <div className="crystal-layer-glow" />
+      <span className="crystal-text">{children}</span>
     </button>
   );
 };

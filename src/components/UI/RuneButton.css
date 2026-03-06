@@ -1,98 +1,130 @@
 /* src/components/UI/RuneButton.css */
 
-.rune-btn-root {
-  /* ... vars ... */
-  --arcane-cyan: #00f0ff;
-  --arcane-cyan-dim: #00f0ff40;
-  --void-stone: #151720;
-  --void-stone-light: #252a3a;
+.crystal-btn-root {
+  /* Colors extracted from your reference image */
+  --c-deep-void: #1a0524; /* Darkest purple */
+  --c-nebula-main: #692d88; /* Main purple body */
+  --c-nebula-light: #cd65ff; /* Lighter pink/purple highlights */
+  --c-edge-light: #eecbff; /* Almost white edge */
+  --c-text-gold: #ffd700; /* Gold text from the image */
 
   position: relative;
   background: transparent;
   border: none;
-  padding: 18px 45px;
   cursor: pointer;
-  isolation: isolate;
-  min-width: 220px;
-  min-height: 70px;
+
+  /* Sizing */
+  min-width: 280px;
+  min-height: 90px;
+  padding: 10px;
+
   display: flex;
-  justify-content: center;
   align-items: center;
-  animation: runeFloat 4s ease-in-out infinite;
+  justify-content: center;
+
+  /* FLOAT ANIMATION */
+  animation: crystalFloat 6s ease-in-out infinite;
+
+  /* CRITICAL: This shadow creates the outer glow AROUND the clip-path shape */
+  filter: drop-shadow(0 0 10px rgba(180, 80, 255, 0.6))
+    drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
 }
 
-/* ... hover states ... */
+/* Hover Effects */
+.crystal-btn-root:hover {
+  transform: scale(1.05) translateY(-2px);
+  filter: drop-shadow(0 0 15px rgba(220, 130, 255, 0.8))
+    drop-shadow(0 15px 30px rgba(0, 0, 0, 0.9));
+  z-index: 10;
+}
 
-/* --- LAYER 1: THE ARCANE STONE --- */
-.rune-layer-rock {
+/* --- LAYER 1: BASE (The Rock) --- */
+.crystal-layer-base {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background-color: var(--void-stone);
-
-  /* Texture remains the same */
-  background-image:
-    repeating-radial-gradient(
-      circle at 50% 0%,
-      transparent 0,
-      rgba(0, 240, 255, 0.05) 1px,
-      transparent 20px
-    ),
-    linear-gradient(160deg, var(--void-stone-light), var(--void-stone));
-
-  /* THE FIX: Softer Shadows */
-  filter: url(#rock-filter) /* 1. The Glow: Kept tight to the rock */
-    drop-shadow(0 0 5px var(--arcane-cyan-dim))
-    /* 2. The Depth Shadow: Increased Blur (20px), Lower Opacity (0.6) */
-    /* This makes it look like a diffuse shadow of a floating object, not a cardboard cutout */
-    drop-shadow(0 15px 20px rgba(0, 0, 0, 0.6));
-
-  transition: all 0.4s ease;
+  background: linear-gradient(160deg, var(--c-nebula-main), var(--c-deep-void));
 }
 
-/* Hover: Energy Surge */
-.rune-btn-root:hover .rune-layer-rock {
-  background-image: linear-gradient(160deg, #1a2639, #0d1117);
-
-  /* On hover, the glow intensifies but stays soft */
-  filter: url(#rock-filter) drop-shadow(0 0 5px var(--arcane-cyan))
-    drop-shadow(0 0 25px var(--arcane-cyan-dim));
-}
-
-/* ... The rest (text layer) remains the same ... */
-.rune-layer-text {
-  position: relative;
+/* --- LAYER 2: NEBULA (The Inner Glow) --- */
+.crystal-layer-nebula {
+  position: absolute;
+  inset: 0;
   z-index: 2;
-  font-family: var(--font-header, "Cinzel", serif);
-  font-weight: 800;
-  font-size: 1.4rem;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #e0ffff;
-  text-shadow:
-    0 0 10px var(--arcane-cyan),
-    0 0 20px var(--arcane-cyan),
-    -1px -1px 0 #000,
-    1px 1px 0 #000;
+  /* A soft radial glow in the center-top */
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(205, 101, 255, 0.4) 0%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+}
+
+/* --- LAYER 3: FACETS (The Sharp 3D Cuts) --- */
+/* This creates the hard diagonal lines of light */
+.crystal-layer-facets {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   pointer-events: none;
-  transition: all 0.3s ease;
+
+  /* Top-left sharp reflection */
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 40%),
+    /* Bottom-right sharp shadow */
+    linear-gradient(315deg, rgba(0, 0, 0, 0.6) 0%, transparent 40%);
+
+  /* Enhance the "glassy" look */
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
-.rune-btn-root:hover .rune-layer-text {
-  color: #ffffff;
+/* --- LAYER 4: RIM LIGHT (Edge Highlight) --- */
+/* Simulates the white outline on the edges */
+.crystal-layer-rim {
+  position: absolute;
+  inset: 2px; /* Slight inset to create a border effect */
+  z-index: 4;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  /* Since we can't border a clip-path easily, we use an inset shadow trick */
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+/* --- TEXT STYLING --- */
+.crystal-text {
+  position: relative;
+  z-index: 5;
+  font-family: "Cinzel", serif; /* Ensure you have this font imported */
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  color: var(--c-text-gold);
+  text-transform: uppercase;
+
+  /* Text Shadow for legibility against the crystal */
   text-shadow:
-    0 0 15px var(--arcane-cyan),
-    0 0 30px var(--arcane-cyan),
-    -1px -1px 0 #000;
-  letter-spacing: 6px;
+    0 2px 0px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(255, 215, 0, 0.5);
+
+  transition: letter-spacing 0.3s ease;
 }
 
-@keyframes runeFloat {
+.crystal-btn-root:hover .crystal-text {
+  letter-spacing: 4px;
+  color: #fff;
+  text-shadow: 0 0 15px #fff;
+}
+
+@keyframes crystalFloat {
   0%,
   100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
 }
